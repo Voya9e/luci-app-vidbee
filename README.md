@@ -1,19 +1,20 @@
 # luci-app-vidbee
 
-A lightweight bilingual LuCI entry for the VidBee Web UI. It adds **Services → VidBee** and opens VidBee in a new browser tab; VidBee itself must be installed and run separately.
+A lightweight bilingual LuCI entry for the VidBee Web UI. It adds **Services → VidBee**, embeds the VidBee interface, and provides a new-tab shortcut. VidBee itself must be installed and run separately.
 
 简体中文 | [English](#english)
 
 ## 简体中文
 
-这是一个轻量级的 VidBee LuCI 入口插件，在 LuCI 的 **服务 → VidBee** 中提供新标签页入口。VidBee 本体及 API 需单独部署和启动。
+这是一个轻量级的 VidBee LuCI 入口插件，在 LuCI 的 **服务 → VidBee** 中嵌入 VidBee 界面，并提供新标签页打开入口。VidBee 本体及 API 需单独部署和启动。
 
 ### 要求
 
 - 已安装 LuCI 的 OpenWrt
 - VidBee Web UI 可通过路由器主机名的 **3000** 端口访问
+- VidBee Web 服务允许被 LuCI 页面嵌入
 
-入口根据当前 LuCI 页面使用的主机名生成 VidBee 地址，并在新标签页打开。若 VidBee 使用其他主机或端口，请修改 `htdocs/luci-static/resources/view/vidbee.js`。
+入口根据当前 LuCI 页面使用的主机名和协议生成 VidBee 地址。若 VidBee 使用其他主机或端口，请修改 `htdocs/luci-static/resources/view/vidbee.js`。如果服务设置了禁止嵌入的 frame 策略，可使用页面上的新标签页按钮。
 
 ### 构建
 
@@ -29,14 +30,15 @@ make package/luci-app-vidbee/compile
 
 ## English
 
-This package adds a lightweight **Services → VidBee** entry to LuCI and opens VidBee in a new browser tab. The VidBee application and API must be deployed and started separately.
+This package adds a lightweight **Services → VidBee** entry to LuCI. It embeds the VidBee interface and provides a shortcut to open it in a new tab. The VidBee application and API must be deployed and started separately.
 
 ### Requirements
 
 - OpenWrt with LuCI
 - VidBee Web UI reachable on port **3000** using the router's hostname
+- VidBee's web service allows embedding in a frame
 
-The entry builds the VidBee URL from the hostname used by the current LuCI page and opens it in a new tab. If VidBee uses another host or port, edit `htdocs/luci-static/resources/view/vidbee.js`.
+The entry builds the VidBee URL from the hostname and protocol used by the current LuCI page. If VidBee uses another host or port, edit `htdocs/luci-static/resources/view/vidbee.js`. Use the new-tab button if the service's frame policy prevents embedding.
 
 ### Build
 
