@@ -1,0 +1,7 @@
+{
+	"luci-app-vidbee": {
+		"description": "Grant access to the VidBee LuCI page",
+		"read": {},
+		"write": {}
+	}
+}
