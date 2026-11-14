@@ -56,8 +56,8 @@ jobs:
           make defconfig
           make package/luci-app-vidbee/compile V=s
           mkdir -p ../dist
-          find bin/packages -type f \\
-            \( -name 'luci-app-vidbee*.apk' -o -name 'luci-app-vidbee*.ipk' \) \\
+          find bin/packages -type f \
+            \( -name 'luci-app-vidbee*.apk' -o -name 'luci-app-vidbee*.ipk' \) \
             -exec cp -v {} ../dist/ \;
           test -n "$(find ../dist -maxdepth 1 -type f -name 'luci-app-vidbee*' -print -quit)"
 
