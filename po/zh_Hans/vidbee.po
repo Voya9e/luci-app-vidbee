@@ -1,0 +1,18 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Language: zh_Hans\\n"
+"Plural-Forms: nplurals=1; plural=0;\\n"
+
+msgid "VidBee"
+msgstr "VidBee"
+
+msgid "VidBee Web UI is served on port 3000. Make sure the VidBee web service is running and reachable from this router."
+msgstr "VidBee Web 界面使用 3000 端口。请确认 VidBee Web 服务已启动，并且可从当前路由器访问。"
+
+msgid "Open VidBee in a new tab"
+msgstr "在新标签页中打开 VidBee"
+
+msgid "VidBee Web UI"
+msgstr "VidBee Web 界面"
