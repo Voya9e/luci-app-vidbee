@@ -1,0 +1,70 @@
+name: Build OpenWrt package
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: openwrt-package-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: OpenWrt 25.12 · mediatek/filogic
+    runs-on: ubuntu-24.04
+    env:
+      OPENWRT_VERSION: 25.12.5
+      SDK_ARCHIVE: openwrt-sdk-25.12.5-mediatek-filogic_gcc-14.3.0_musl.Linux-x86_64.tar.zst
+      SDK_SHA256: ff4a38a397caa2cfe1c39e18f84ddede14878221b3593c3f2c4cfe24e3ec4c25
+    steps:
+      - name: Check out VidBee LuCI package
+        uses: actions/checkout@v4
+        with:
+          path: vidbee
+
+      - name: Install host build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential clang flex gawk gettext \
+            git libncurses-dev libssl-dev python3 rsync unzip zlib1g-dev zstd
+
+      - name: Download and verify OpenWrt SDK
+        run: |
+          base_url="https://downloads.openwrt.org/releases/${OPENWRT_VERSION}/targets/mediatek/filogic"
+          curl --fail --location --retry 3 --output "${SDK_ARCHIVE}" "${base_url}/${SDK_ARCHIVE}"
+          echo "${SDK_SHA256}  ${SDK_ARCHIVE}" | sha256sum --check -
+          mkdir sdk
+          tar --zstd -xf "${SDK_ARCHIVE}" --directory sdk --strip-components=1
+
+      - name: Install LuCI feed and package source
+        run: |
+          cd sdk
+          ./scripts/feeds update luci
+          ./scripts/feeds install -p luci luci-base
+          mkdir -p package/luci-app-vidbee
+          tar --exclude=.git -C ../vidbee -cf - . | tar -C package/luci-app-vidbee -xf -
+
+      - name: Build package
+        run: |
+          cd sdk
+          make defconfig
+          make package/luci-app-vidbee/compile V=s
+          mkdir -p ../dist
+          find bin/packages -type f \\
+            \( -name 'luci-app-vidbee*.apk' -o -name 'luci-app-vidbee*.ipk' \) \\
+            -exec cp -v {} ../dist/ \;
+          test -n "$(find ../dist -maxdepth 1 -type f -name 'luci-app-vidbee*' -print -quit)"
+
+      - name: Upload install package
+        uses: actions/upload-artifact@v4
+        with:
+          name: luci-app-vidbee-openwrt-25.12-mediatek-filogic
+          path: dist/luci-app-vidbee*
+          if-no-files-found: error
+          retention-days: 30
