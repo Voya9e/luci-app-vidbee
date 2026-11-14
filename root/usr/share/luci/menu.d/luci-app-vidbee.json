@@ -1,0 +1,13 @@
+{
+	"admin/services/vidbee": {
+		"title": "VidBee",
+		"order": 90,
+		"action": {
+			"type": "view",
+			"path": "vidbee"
+		},
+		"depends": {
+			"acl": [ "luci-app-vidbee" ]
+		}
+	}
+}
